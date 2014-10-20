@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ARly</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="POI">POI</string>
+    <string name="VK">VK</string>
+    <string name="Google">Google</string>
+    <string name="Twitter">Twitter</string>
+    <string name="Wikipedia">Wikipedia</string>
+    <string name="Radius">Radius</string>
+
+</resources>

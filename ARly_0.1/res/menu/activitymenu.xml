@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu 
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:id="@+id/mainMenu" >
+     <item
+        android:id="@+id/radius"
+        android:icon="@drawable/ic_action_location_2"
+        android:title="Radius">
+     
+    </item>
+
+    <item
+        android:id="@+id/POI"
+        android:icon="@drawable/ic_action_pinterest"
+        android:title="@string/POI">
+        
+        <menu>
+            <item android:id="@+id/google"
+                  android:title="Google" 
+                  android:icon="@drawable/google"/>
+            <item android:id="@+id/wikipedia"
+                  android:title="Wikipedia"
+                  android:icon="@drawable/wikipedia"/>
+            <item android:id="@+id/twitter"
+                  android:title="Twitter"
+                  android:icon="@drawable/twitter"/>
+            <item android:id="@+id/vk"
+                  android:title="VK" 
+                  android:icon="@drawable/vk"/>
+            <item android:id="@+id/osm"
+                  android:title="OSM" 
+                  android:icon="@drawable/osm"/>
+        </menu>
+        
+    </item>
+    
+
+    
+
+</menu>
