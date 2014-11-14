@@ -21,8 +21,7 @@ public class GeoActivity extends Activity {
 		geoCalendar = (CalendarView)findViewById(R.id.geoCalendarView);			
 		geoCalendar.setOnDateChangeListener(new OnDateChangeListener() {
 			@Override
-			public void onSelectedDayChange(CalendarView view, int year, int month,
-                    int dayOfMonth) {
+			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
 				Toast.makeText(getApplicationContext(), ""+dayOfMonth + " " + (month+1) + " " + year, 0).show();
 				GetData gd = new GetData();
 				gd.connectToFtp("indices/old_indices/1994_DGD.txt");
