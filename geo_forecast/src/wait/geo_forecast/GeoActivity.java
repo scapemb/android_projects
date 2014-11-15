@@ -1,6 +1,7 @@
 package wait.geo_forecast;
 
 import java.util.Calendar;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -22,12 +23,39 @@ public class GeoActivity extends Activity {
 		geoCalendar.setOnDateChangeListener(new OnDateChangeListener() {
 			@Override
 			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-				Toast.makeText(getApplicationContext(), ""+dayOfMonth + " " + (month+1) + " " + year, 0).show();
 				GetData gd = new GetData();
-				gd.connectToFtp("indices/old_indices/1994_DGD.txt");
-			}
+				if(year > 1996){
+					try {
+						gd.connectToFtp("indices/old_indices/" + year +"_DGD.txt");
+						OldParser op = new OldParser();
+						op.setParcelableString(gd.getDataString());
+						
+						String monthInFormat;
+						String dayInFormat;
+						if(month < 10) {
+							monthInFormat = "0" + month;
+						}
+						else{monthInFormat = "" + month;}
+						
+						if(dayOfMonth < 10) {
+							dayInFormat = "0" + dayOfMonth;
+						}
+						else{dayInFormat = "" + dayOfMonth;}
+						
+						op.parse(year, monthInFormat, dayInFormat);
+						
+						} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						}
+					}
+
+				}
 			
-		});
+			});
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package wait.geo_forecast;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -29,10 +30,12 @@ public class GetData {
 	  *
 	  * @param endUrl 	ending of FTP's Url 
 	  * @return void
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	  */
-	protected void connectToFtp(String endUrl)
+	protected void connectToFtp(String endUrl) throws InterruptedException, ExecutionException
 	{
-		new GetDataFromUrl().execute(baseUrl + endUrl);	
+		dataString = new GetDataFromUrl().execute(baseUrl + endUrl).get();	
 	}
 	
 	/**

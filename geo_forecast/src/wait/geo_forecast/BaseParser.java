@@ -5,8 +5,8 @@ import java.util.Map;
 
 public abstract class BaseParser {
 	
-	private String parselableString;
-	private  Map<String, ArrayList<Integer>> parsedMap;
+	protected String parselableString;
+	protected  Map<String, ArrayList<Integer>> parsedMap;
 	
 	public void setParcelableString(String s) {
 		parselableString = s;
@@ -16,5 +16,10 @@ public abstract class BaseParser {
 	
 	public Map<String,ArrayList<Integer>> getParcedData(){
 		return parsedMap;
+	}
+
+	public void parse(int year, String monthInFormat, String dayInFormat) {
+		// TODO Auto-generated method stub
+		
 	};
 }
