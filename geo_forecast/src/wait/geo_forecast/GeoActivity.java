@@ -14,6 +14,11 @@ import android.widget.Toast;
 public class GeoActivity extends Activity {
 
 	private CalendarView geoCalendar;
+	
+	private String monthInFormat;
+	private String dayInFormat;
+	private String yearInFormat;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -24,25 +29,18 @@ public class GeoActivity extends Activity {
 			@Override
 			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
 				GetData gd = new GetData();
+				month++;
+				setDataInFormat( year,  month,  dayOfMonth);
+								
 				if(year > 1996){
 					try {
-						gd.connectToFtp("indices/old_indices/" + year +"_DGD.txt");
+						gd.connectToFtp("indices/old_indices/" + yearInFormat +"_DGD.txt");
 						OldParser op = new OldParser();
 						op.setParcelableString(gd.getDataString());
 						
-						String monthInFormat;
-						String dayInFormat;
-						if(month < 10) {
-							monthInFormat = "0" + month;
-						}
-						else{monthInFormat = "" + month;}
 						
-						if(dayOfMonth < 10) {
-							dayInFormat = "0" + dayOfMonth;
-						}
-						else{dayInFormat = "" + dayOfMonth;}
-						
-						op.parse(year, monthInFormat, dayInFormat);
+						Toast toast = Toast.makeText(getApplicationContext(), op.parse(String.valueOf(year), monthInFormat, dayInFormat), Toast.LENGTH_LONG);
+						toast.show();
 						
 						} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
@@ -58,6 +56,37 @@ public class GeoActivity extends Activity {
 			});
 	}
 
+	private void setDataInFormat(int year, int month, int dayOfMonth){
+		if(month < 10) {
+			monthInFormat = "0" + month;
+		}
+		else{monthInFormat = "" + month;}
+		
+		if(dayOfMonth < 10) {
+			dayInFormat = "0" + dayOfMonth;
+		}
+		else{dayInFormat = "" + dayOfMonth;}
+		
+		
+		Calendar calendar = Calendar.getInstance();
+		
+		if(year == calendar.get(Calendar.YEAR)){
+			if(month < 4){
+				yearInFormat = year + "Q1";
+			}
+			else if(month >= 4 && month < 7){
+				yearInFormat = year + "Q2";
+			}
+			else if(month >= 7 && month < 10){
+				yearInFormat = year + "Q3";
+			}
+			else{
+				yearInFormat = year + "Q4";
+			}
+		}
+		else{yearInFormat = "" + year;}
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

@@ -18,7 +18,10 @@ public abstract class BaseParser {
 		return parsedMap;
 	}
 
-	public void parse(int year, String monthInFormat, String dayInFormat) {
+
+	public String parse(String yearInFormat, String monthInFormat,
+			String dayInFormat) {
+				return dayInFormat;
 		// TODO Auto-generated method stub
 		
 	};
