@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ public class GeoActivity extends FragmentActivity  {
 		geoCalendar.setOnDateChangeListener(new OnDateChangeListener() {
 			
 			Long date = geoCalendar.getDate();
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
 				
@@ -67,6 +69,9 @@ public class GeoActivity extends FragmentActivity  {
 									sendBundle = new Bundle();
 									sendBundle.putIntegerArrayList("numlist", indices);
 									
+									ArrayList<String> formattedDates = new ArrayList<String>();
+									formattedDates.add(String.valueOf(dayOfMonth) + " " + String.valueOf(month));
+									sendBundle.putStringArrayList("datelist", formattedDates);
 									DataDialogFragment showBriefDialog = new DataDialogFragment();
 									
 									showBriefDialog.setArguments(sendBundle);
@@ -96,6 +101,14 @@ public class GeoActivity extends FragmentActivity  {
 									sendBundle = new Bundle();
 									sendBundle.putIntegerArrayList("numlist", formattedIndices);
 									
+									ArrayList<String> formattedDates = new ArrayList<String>();
+									
+									for(int i=0; i<3; i++)
+									{
+										formattedDates.add(currentDate.getDate() + i + " " + currentDate.getMonth());
+									}
+									
+									sendBundle.putStringArrayList("datelist", formattedDates);
 									DataDialogFragment showBriefDialog = new DataDialogFragment();
 									
 									showBriefDialog.setArguments(sendBundle);

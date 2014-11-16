@@ -10,6 +10,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
@@ -28,11 +29,13 @@ import android.widget.TextView.OnEditorActionListener;
 public class DataDialogFragment extends DialogFragment {
 
    private ArrayList<Integer> indices = new ArrayList<Integer>(); 
-   //private 
+   private ArrayList<String> dates = new ArrayList<String>(); 
+   private final int NUMBER_IN_SET = 8;
+   
+   private int[] colors = {Color.BLUE, Color.YELLOW, Color.GREEN};
    public DataDialogFragment() {
        // Empty constructor required for DialogFragment
    }
-//TODO: set onClickListener
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
            Bundle savedInstanceState) {
@@ -43,33 +46,32 @@ public class DataDialogFragment extends DialogFragment {
 
        Bundle bundle=getArguments(); 
        
-       //numbers = bundle.getStringArrayList("numlist");  
+       dates = bundle.getStringArrayList("datelist");  
        indices = bundle.getIntegerArrayList("numlist");  
-       int setNumber = (indices.size() / 8);
-       ArrayList<ArrayList<BarEntry>> yVals = new ArrayList<ArrayList<BarEntry>>();
-       
+       //int setNumber = (indices.size() / NUMBER_IN_SET);
+       ArrayList<BarEntry> yVals = new ArrayList<BarEntry>();
+      /* 
        for(int i=0; i < setNumber; i++)
        {
     	   yVals.add(new ArrayList<BarEntry>() );
        }
-       
+       */
        ArrayList<String> xVals = new ArrayList<String>();
-       int i = 0, ind = 0, num = 0;
-       for(int index : indices)
-       {
-    	   if(num > 7)
-    	   {ind++;num = 0;}
-    	   yVals.get(ind).add(new BarEntry(index , i));
+       int i = 0;
+       //, ind = 0, num = 0;
+       for(int index : indices) {
+    	   yVals.add(new BarEntry(index , i));
     	   xVals.add(""+i);
-    	   i++; num++;
+    	   
+    	   i++;
        }
        ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
        
-       for(ArrayList<BarEntry> index : yVals) {
-           BarDataSet chartData = new BarDataSet(index,"Kp-indices");
-          // chartData.setColor(color);
+       
+           BarDataSet chartData = new BarDataSet(yVals,dates.get(i));
+           
            dataSets.add(chartData);
-       }
+       
 
        
        
