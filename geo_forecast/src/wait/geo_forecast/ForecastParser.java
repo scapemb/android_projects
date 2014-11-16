@@ -10,6 +10,12 @@ public class ForecastParser extends BaseParser{
 	private ArrayList<ArrayList<Integer>> indices = new  ArrayList<ArrayList<Integer>>();
 	private final int forecastDaysNumber = 3;
 	
+	/**
+	  * <p>Parsing need forecast data from raw string.</p>
+	  * <p>With regex method get data for 3-days forecast </p>
+	  *
+	  * @return   ArrayList<ArrayList<Integer>> 
+	  */
 	@Override
 	public ArrayList<ArrayList<Integer>> parse() {
 		initializeArray();		

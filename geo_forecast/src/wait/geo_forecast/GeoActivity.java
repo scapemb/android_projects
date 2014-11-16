@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutionException;
 
 
 
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,36 +39,37 @@ public class GeoActivity extends FragmentActivity  {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_geo);
 		
-		geoCalendar = (CalendarView)findViewById(R.id.geoCalendarView);	
+		geoCalendar = (CalendarView)findViewById(R.id.geoCalendarView);			//attaching Calendar View
 		
 		 
 		
-		geoCalendar.setOnDateChangeListener(new OnDateChangeListener() {
+		geoCalendar.setOnDateChangeListener(new OnDateChangeListener() {		//set listener to day's change on calendar
 			
 			Long date = geoCalendar.getDate();
+			
 			@SuppressWarnings("deprecation")
 			@Override
 			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
 				
-				if(geoCalendar.getDate() != date){
+				if(geoCalendar.getDate() != date){								//for not changing day in scrolling
 					date = geoCalendar.getDate(); 
 
 								
-					month++;
-					setDataInFormat( year,  month,  dayOfMonth);
+					month++;													
+					setDataInFormat( year,  month,  dayOfMonth);				//formatting date for query
 									
-					if(year > 1996){
+					if(year > 1996){											//first year in FTP history
 						Date currentDate = new Date();
-						if(geoCalendar.getDate() < currentDate.getTime()){
+						if(geoCalendar.getDate() < currentDate.getTime()){		//getting history brief
 							
 							try {
-								gd.connectToFtp("indices/old_indices/" + yearInFormat +"_DGD.txt");
-								op.setParcelableString(gd.getDataString());
-								ArrayList<Integer> indices = op.parse(String.valueOf(year), monthInFormat, dayInFormat);
+								gd.connectToFtp("indices/old_indices/" + yearInFormat +"_DGD.txt");							//get data from FTP
+								op.setParcelableString(gd.getDataString());													//set string of data to parse
+								ArrayList<Integer> indices = op.parse(String.valueOf(year), monthInFormat, dayInFormat);	//parsing & return parsed data
 								
 								if(indices != null){
 									sendBundle = new Bundle();
-									sendBundle.putIntegerArrayList("numlist", indices);
+									sendBundle.putIntegerArrayList("numlist", indices);										//transfer indices to Fragment for showing in chart
 									
 									ArrayList<String> formattedDates = new ArrayList<String>();
 									formattedDates.add(String.valueOf(dayOfMonth) + " " + String.valueOf(month));
@@ -75,7 +77,7 @@ public class GeoActivity extends FragmentActivity  {
 									DataDialogFragment showBriefDialog = new DataDialogFragment();
 									
 									showBriefDialog.setArguments(sendBundle);
-									showBriefDialog.show(fm, "fragment_send_message");
+									showBriefDialog.show(fm, "fragment_send_message");										//showing chart
 								}
 								
 							} catch (InterruptedException e) {
@@ -86,11 +88,11 @@ public class GeoActivity extends FragmentActivity  {
 								e.printStackTrace();
 							}
 						}
-						else{
+						else{													//getting forecast brief
 							try {
-								gd.connectToFtp("latest/geomag_forecast.txt");
+								gd.connectToFtp("latest/geomag_forecast.txt");		//get 3-days forecast from FTP
 								fp.setParcelableString(gd.getDataString());
-								ArrayList<ArrayList<Integer>> indices = fp.parse();
+								ArrayList<ArrayList<Integer>> indices = fp.parse();	//get parsed indices for forecast
 								
 								if(indices != null){
 									ArrayList<Integer> formattedIndices = new ArrayList<Integer>();
@@ -143,7 +145,7 @@ public class GeoActivity extends FragmentActivity  {
 		
 		Calendar calendar = Calendar.getInstance();
 		
-		if(year == calendar.get(Calendar.YEAR)){
+		if(year == calendar.get(Calendar.YEAR)){		//in current year in FTP data splitted at quarters
 			if(month < 4){
 				yearInFormat = year + "Q1";
 			}

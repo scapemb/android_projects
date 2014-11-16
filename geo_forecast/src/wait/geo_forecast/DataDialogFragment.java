@@ -41,35 +41,41 @@ public class DataDialogFragment extends DialogFragment {
            Bundle savedInstanceState) {
        View view = inflater.inflate(R.layout.data_dialog, container);
        BarChart chart = (BarChart) view.findViewById(R.id.chart);
+       TextView kpText = (TextView) view.findViewById(R.id.Kp_text);
+       TextView infoText = (TextView) view.findViewById(R.id.info_text);
        
        getDialog().setTitle("Geomagnetic brief");
 
        Bundle bundle=getArguments(); 
        
-       dates = bundle.getStringArrayList("datelist");  
-       indices = bundle.getIntegerArrayList("numlist");  
-       //int setNumber = (indices.size() / NUMBER_IN_SET);
+       dates = bundle.getStringArrayList("datelist");  			//get dates from Activity
+       indices = bundle.getIntegerArrayList("numlist");  		//get indices from Activity
+
        ArrayList<BarEntry> yVals = new ArrayList<BarEntry>();
-      /* 
-       for(int i=0; i < setNumber; i++)
-       {
-    	   yVals.add(new ArrayList<BarEntry>() );
-       }
-       */
        ArrayList<String> xVals = new ArrayList<String>();
-       int i = 0;
-       //, ind = 0, num = 0;
-       for(int index : indices) {
+       int i = 0, sum = 0;
+
+       for(int index : indices) {								//
     	   yVals.add(new BarEntry(index , i));
     	   xVals.add(""+i);
-    	   
+    	   if(sum < index){sum = index;}						//getting the highest Kp index
     	   i++;
        }
+       
+       
+       kpText.setText("The Highest Kp index = " + sum);
+       
+       infoText.setText(getInfoText(sum));
+       
        ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
-       
-       
-           BarDataSet chartData = new BarDataSet(yVals,dates.get(i));
-           
+       BarDataSet chartData = null;
+       	if(dates.size() > 1){
+           chartData = new BarDataSet(yVals,"Forecast from " + dates.get(0) + " to " + dates.get(2));
+       	}
+       	else{
+       		chartData = new BarDataSet(yVals,"Forecast for " + dates.get(0));
+       	}
+       	
            dataSets.add(chartData);
        
 
@@ -83,4 +89,20 @@ public class DataDialogFragment extends DialogFragment {
    }
 
 
+   private String getInfoText(int Kp){
+	   
+	   switch(Kp){
+	   case 1:{}
+	   case 2:{}
+	   case 3:{}
+	   case 4:{return "G0 - No Geomagnetic Storm";}
+	   case 5:{return "G1 - Low Geomagnetic Storm. In high latitude can be auroras. Can be low failures in electronic";}
+	   case 6:{return "G2 - Medium Geomagnetic Storm. Can be failures in transformers & other electronics";}
+	   case 7:{return "G3 - High Geomagnetic Storm. Overload of electrics. Errors in GPS & radio";}
+	   case 8:{return "G4 - Large Geomagnetic Storm. Bad GPS & radio fore some time. Medium frequency radio doesn't work";}
+	   case 9:{return "G5 - Very large Geomagnetic Storm. Huge problems with GPS, radio & electronics for some days";}
+	   }
+	   
+	   return "error";
+   }
 }
