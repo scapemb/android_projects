@@ -11,16 +11,26 @@ import android.widget.Toast;
 public class OldParser extends BaseParser {
 
 	@Override
-	public String parse(String yearInFormat, String monthInFormat, String dayInFormat) {
+	public ArrayList<Integer> parse(String yearInFormat, String monthInFormat, String dayInFormat) {
 
 		Pattern pattern = Pattern.compile(yearInFormat+"[\\s]" + monthInFormat + "[\\s]" + dayInFormat + "[\\d\\s]{69}");//[.]{54}[.]{15}");
 		Matcher matcher = pattern.matcher(parselableString);
 		if (matcher.find())
 		{
-			  return matcher.group().substring(0, 11) + matcher.group().substring(64);
-			  
-			  //return raw;
+			return getIndices(matcher.group().substring(0, 11) + matcher.group().substring(64));
+			
 		}
 		return null;
+	}
+	
+	private ArrayList<Integer> getIndices(String data){
+		 ArrayList<Integer> indices = new  ArrayList<Integer>();
+		for(char c : data.substring(11).toCharArray()){
+			if(c != ' '){
+				indices.add(Character.getNumericValue(c));
+			}
+		}
+		
+		return indices;		
 	}
 }

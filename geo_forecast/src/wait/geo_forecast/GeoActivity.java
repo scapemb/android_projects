@@ -1,6 +1,8 @@
 package wait.geo_forecast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
@@ -18,42 +20,67 @@ public class GeoActivity extends Activity {
 	private String monthInFormat;
 	private String dayInFormat;
 	private String yearInFormat;
+	private OldParser op = new OldParser();
+	private ForecastParser fp = new ForecastParser();
+	private GetData gd = new GetData();
 	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_geo);
 		
-		geoCalendar = (CalendarView)findViewById(R.id.geoCalendarView);			
+		geoCalendar = (CalendarView)findViewById(R.id.geoCalendarView);	
+		
+		 
+		
 		geoCalendar.setOnDateChangeListener(new OnDateChangeListener() {
+			
+			Long date = geoCalendar.getDate();
 			@Override
 			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-				GetData gd = new GetData();
-				month++;
-				setDataInFormat( year,  month,  dayOfMonth);
+				
+				if(geoCalendar.getDate() != date){
+					date = geoCalendar.getDate(); 
+
 								
-				if(year > 1996){
-					try {
-						gd.connectToFtp("indices/old_indices/" + yearInFormat +"_DGD.txt");
-						OldParser op = new OldParser();
-						op.setParcelableString(gd.getDataString());
-						
-						
-						Toast toast = Toast.makeText(getApplicationContext(), op.parse(String.valueOf(year), monthInFormat, dayInFormat), Toast.LENGTH_LONG);
-						toast.show();
-						
-						} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					month++;
+					setDataInFormat( year,  month,  dayOfMonth);
+									
+					if(year > 1996){
+						Date currentDate = new Date();
+						if(geoCalendar.getDate() < currentDate.getTime()){
+							
+							try {
+								gd.connectToFtp("indices/old_indices/" + yearInFormat +"_DGD.txt");
+								op.setParcelableString(gd.getDataString());
+								ArrayList<Integer> indices = op.parse(String.valueOf(year), monthInFormat, dayInFormat);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						else{
+							try {
+								gd.connectToFtp("latest/geomag_forecast.txt");
+								fp.setParcelableString(gd.getDataString());
+								ArrayList<ArrayList<Integer>> indices = fp.parse();
+							}catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					}
-
 				}
+			}
 			
-			});
+		});
 	}
 
 	private void setDataInFormat(int year, int month, int dayOfMonth){

@@ -11,17 +11,22 @@ public abstract class BaseParser {
 	public void setParcelableString(String s) {
 		parselableString = s;
 	}
-	
-	public void parse(){};
+
 	
 	public Map<String,ArrayList<Integer>> getParcedData(){
 		return parsedMap;
 	}
 
 
-	public String parse(String yearInFormat, String monthInFormat,
+	public ArrayList<Integer> parse(String yearInFormat, String monthInFormat,
 			String dayInFormat) {
-				return dayInFormat;
+				return null;
+		// TODO Auto-generated method stub
+		
+	};
+	
+	public ArrayList<ArrayList<Integer>> parse() {
+				return null;
 		// TODO Auto-generated method stub
 		
 	};
