@@ -13,7 +13,7 @@ public class OldParser extends BaseParser {
 	@Override
 	public ArrayList<Integer> parse(String yearInFormat, String monthInFormat, String dayInFormat) {
 
-		Pattern pattern = Pattern.compile(yearInFormat+"[\\s]" + monthInFormat + "[\\s]" + dayInFormat + "[\\d\\s]{69}");//[.]{54}[.]{15}");
+		Pattern pattern = Pattern.compile(yearInFormat+"[\\s]" + monthInFormat + "[\\s]" + dayInFormat + "[\\d\\s\\-]{69}");//[.]{54}[.]{15}");
 		Matcher matcher = pattern.matcher(parselableString);
 		if (matcher.find())
 		{
@@ -26,7 +26,7 @@ public class OldParser extends BaseParser {
 	private ArrayList<Integer> getIndices(String data){
 		 ArrayList<Integer> indices = new  ArrayList<Integer>();
 		for(char c : data.substring(11).toCharArray()){
-			if(c != ' '){
+			if(c != ' ' && c != '-'){
 				indices.add(Character.getNumericValue(c));
 			}
 		}

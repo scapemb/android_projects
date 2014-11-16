@@ -5,15 +5,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
+
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CalendarView;
 import android.widget.CalendarView.OnDateChangeListener;
 import android.widget.Toast;
 
-public class GeoActivity extends Activity {
+public class GeoActivity extends FragmentActivity  {
 
 	private CalendarView geoCalendar;
 	
@@ -23,6 +27,9 @@ public class GeoActivity extends Activity {
 	private OldParser op = new OldParser();
 	private ForecastParser fp = new ForecastParser();
 	private GetData gd = new GetData();
+	
+	private FragmentManager fm = getSupportFragmentManager();
+	private Bundle sendBundle;
 	
 
 	@Override
@@ -55,6 +62,17 @@ public class GeoActivity extends Activity {
 								gd.connectToFtp("indices/old_indices/" + yearInFormat +"_DGD.txt");
 								op.setParcelableString(gd.getDataString());
 								ArrayList<Integer> indices = op.parse(String.valueOf(year), monthInFormat, dayInFormat);
+								
+								if(indices != null){
+									sendBundle = new Bundle();
+									sendBundle.putIntegerArrayList("numlist", indices);
+									
+									DataDialogFragment showBriefDialog = new DataDialogFragment();
+									
+									showBriefDialog.setArguments(sendBundle);
+									showBriefDialog.show(fm, "fragment_send_message");
+								}
+								
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -68,6 +86,21 @@ public class GeoActivity extends Activity {
 								gd.connectToFtp("latest/geomag_forecast.txt");
 								fp.setParcelableString(gd.getDataString());
 								ArrayList<ArrayList<Integer>> indices = fp.parse();
+								
+								if(indices != null){
+									ArrayList<Integer> formattedIndices = new ArrayList<Integer>();
+									for(ArrayList<Integer> i : indices)
+									{
+										formattedIndices.addAll(i);
+									}
+									sendBundle = new Bundle();
+									sendBundle.putIntegerArrayList("numlist", formattedIndices);
+									
+									DataDialogFragment showBriefDialog = new DataDialogFragment();
+									
+									showBriefDialog.setArguments(sendBundle);
+									showBriefDialog.show(fm, "fragment_send_message");
+								}
 							}catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();

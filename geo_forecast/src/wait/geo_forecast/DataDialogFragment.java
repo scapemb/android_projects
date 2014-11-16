@@ -4,6 +4,12 @@ package wait.geo_forecast;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
@@ -21,11 +27,8 @@ import android.widget.TextView.OnEditorActionListener;
 
 public class DataDialogFragment extends DialogFragment {
 
-   public interface PickNumberDialogListener {
-       void onFinishPickNumberDialog(int position, boolean isDelete);
-   }
-
-   private ArrayList<String> numbers = new ArrayList<String>(); 
+   private ArrayList<Integer> indices = new ArrayList<Integer>(); 
+   //private 
    public DataDialogFragment() {
        // Empty constructor required for DialogFragment
    }
@@ -33,13 +36,47 @@ public class DataDialogFragment extends DialogFragment {
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
            Bundle savedInstanceState) {
-       View view = inflater.inflate(R.layout.activity_geo, container);
-       getDialog().setTitle("Сообщение");
+       View view = inflater.inflate(R.layout.data_dialog, container);
+       BarChart chart = (BarChart) view.findViewById(R.id.chart);
+       
+       getDialog().setTitle("Geomagnetic brief");
 
        Bundle bundle=getArguments(); 
        
-       numbers = bundle.getStringArrayList("numlist");  
+       //numbers = bundle.getStringArrayList("numlist");  
+       indices = bundle.getIntegerArrayList("numlist");  
+       int setNumber = (indices.size() / 8);
+       ArrayList<ArrayList<BarEntry>> yVals = new ArrayList<ArrayList<BarEntry>>();
        
+       for(int i=0; i < setNumber; i++)
+       {
+    	   yVals.add(new ArrayList<BarEntry>() );
+       }
+       
+       ArrayList<String> xVals = new ArrayList<String>();
+       int i = 0, ind = 0, num = 0;
+       for(int index : indices)
+       {
+    	   if(num > 7)
+    	   {ind++;num = 0;}
+    	   yVals.get(ind).add(new BarEntry(index , i));
+    	   xVals.add(""+i);
+    	   i++; num++;
+       }
+       ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
+       
+       for(ArrayList<BarEntry> index : yVals) {
+           BarDataSet chartData = new BarDataSet(index,"Kp-indices");
+          // chartData.setColor(color);
+           dataSets.add(chartData);
+       }
+
+       
+       
+       
+       BarData data = new BarData(xVals, dataSets);
+       
+       chart.setData(data);
        return view;
    }
 
